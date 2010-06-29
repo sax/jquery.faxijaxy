@@ -1,0 +1,83 @@
+h1. jquery.faxijaxy
+
+This is a jQuery plugin that replaces file inputs with tags that can be styled how you like. It does this by wrapping the input in another tag and making the input itself invisible. It then applies a submit handler to any multi-part file input forms it finds, submitting the form with ajax.
+
+h1. Dependencies
+
+FaxyJaxy depends upon the jQuery Form plugin.
+
+* http://jquery.malsup.com/form/
+* http://github.com/malsup/form
+
+h1. Rails Dependencies
+
+When using this plugin on the front end of a Rails 3 application, the server needs to be set up to properly accept and return JSON responses in a way that jquery.form can handle. There is a gem built to handle this:
+
+<pre>
+  gem 'faxijaxy'
+  gem 'faxijaxy', :git => 'http://github.com/sax/faxijaxy.git'
+</pre>
+
+h1. Usage
+
+HTML:
+
+<pre>
+  <script src="/javascripts/jquery-1.4.2.min.js" type="text/javascript"></script>
+  <script src="/javascripts/form/jquery.form.js" type="text/javascript"></script>
+  <script src="/javascripts/jquery.faxijaxy.js" type="text/javascript"></script>
+  <script src="/javascripts/application.js" type="text/javascript"></script>
+</pre>
+
+Application.js:
+
+<pre>
+  jQuery(document).ready(function(){
+    // alter default text that appear for any file input
+    jQuery.faxijaxy.init({handle : '(click here to upload)'});
+    
+    // auto submit files with no response handler via JSON
+    jQuery.faxijaxy();
+    
+    // auto submit files with a response handler
+    jQuery.faxijaxy(function(data){
+      alert(data.message);
+    })
+    
+    // overwrite defaults on the fly
+    jQuery.faxijaxy({wrapperClass: 'fileupload'})
+    
+    // ovewrite default and handle response
+    jQuery.faxijaxy({handleTag: 'span'}, responseMethod);
+  });
+</pre>
+
+h1. Settings & Defaults
+
+These are the available settings.
+
+<pre>
+  jQuery.faxijaxy.settings = {
+    wrapperTag : 'div',         // the tag that will wrap the input
+    wrapperClass : 'file_ajax', // the class applied to the wrapper
+    handleTag : 'div',          // the tag that wraps the replacement text
+    handle : 'add a file',      // the text that will replace the input
+    autoSubmit : true,          // submit form on selecting file
+    dataType: 'json'            // json | script
+  }
+</pre>
+
+Settings can be altered site-wide using the init method:
+
+<pre>
+  jQuery.faxijaxy.init({
+    wrapperTag : 'li',
+    wrapperClass : null
+  });
+</pre>
+
+Or they can be set when calling the plugin:
+
+<pre>
+  jQuery.faxijaxy({autoSubmit: false});
+</pre>
